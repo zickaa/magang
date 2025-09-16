@@ -5,57 +5,47 @@ namespace App\Http\Controllers;
 use App\Models\Allocation;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Http\Request;
-
 class DashboardController extends Controller
 {
-    // Hanya bisa diakses oleh user yang login
-    public function __construct()
-    {
-        // $this->middleware('session.auth'); // pakai middleware auth Laravel
-    }
-
-    // Menampilkan dashboard
     public function index()
     {
-        return view('dashboard'); // pastikan resources/views/dashboard.blade.php ada
+        return view('dashboard');
     }
 
-    // Tambahkan method-method berikut untuk menangani route sidebar
     public function perusahaan()
     {
-        return view('pages.perusahaan'); // pastikan resources/views/perusahaan.blade.php ada
+        return view('pages.perusahaan');
     }
 
     public function produk()
     {
-        return view('pages.produk'); // pastikan resources/views/produk.blade.php ada
+        return view('pages.produk');
     }
 
     public function hubungi()
     {
-        return view('pages.hubungi'); // pastikan resources/views/hubungi.blade.php ada
+        return view('pages.hubungi');
     }
+
     public function data()
-    {
-        // Rekap allocations gabung ke assets
-        $allocations = DB::table('allocations')
-            ->join('assets', 'allocations.asset_id', '=', 'assets.id')
-            ->select(
-                'assets.nama_asset as asset_name',
-                DB::raw('SUM(allocations.jumlah) as total'),
-                DB::raw('MAX(allocations.created_at) as tanggal')
-            )
-            ->groupBy('assets.nama_asset')
-            ->get();
+{
+    $rekap = DB::table('allocations')
+        ->join('assets', 'allocations.asset_id', '=', 'assets.id')
+        ->join('locations', 'allocations.to_location_id', '=', 'locations.id')
+        ->select(
+            'locations.nama_lokasi',
+            DB::raw('SUM(allocations.jumlah) as total_asset')
+        )
+        ->groupBy('locations.nama_lokasi')
+        ->orderBy('locations.nama_lokasi')
+        ->get();
 
-        // 👇 kirim ke view
-        return view('pages.data', compact('allocations'));
-    }
+    // ✅ ubah get() → paginate(5)
+    $locations = Allocation::with(['asset', 'fromLocation', 'toLocation'])
+        ->orderBy('date', 'desc')
+        ->paginate(5); // tampil 5 data per halaman
 
-    public function manage()
-    {
-        // Tidak perlu, bisa dihapus
-        // return view('pages.manage');
-    }
+    return view('pages.data', compact('rekap', 'locations'));
+}
+
 }

@@ -1,52 +1,45 @@
 <?php
 
-// app/Http/Controllers/ManageController.php
-
-// app/Http/Controllers/ManageController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Asset;
 use App\Models\Allocation;
+use App\Models\Location;
 
 class ManageController extends Controller
 {
     public function index()
     {
-        $allocations = Allocation::orderBy('date', 'desc')->get();
-        return view('pages.manage', compact('allocations'));
+        $allocations = Allocation::with(['asset', 'fromLocation', 'toLocation'])
+            ->orderBy('date', 'desc')
+            ->get();
+
+        $assets = Asset::all();
+        $locations = Location::all();
+
+        return view('pages.manage', compact('allocations', 'assets', 'locations'));
     }
 
-    // app/Http/Controllers/ManageController.php
+
     public function store(Request $request)
     {
         $request->validate([
-            'asset_name'    => 'required|string|max:255',
-            'from_location' => 'required|string|max:255',
-            'to_location'   => 'required|string|max:255',
-            'date'          => 'required|date',
+            'asset_id'       => 'required|exists:assets,id',
+            'from_location_id' => 'nullable|exists:locations,id',
+            'to_location_id'   => 'required|exists:locations,id',
+            'jumlah'         => 'required|integer|min:1',
+            'date'           => 'required|date',
         ]);
 
         Allocation::create([
-            'asset_name'    => $request->asset_name,
-            'from_location' => $request->from_location,
-            'to_location'   => $request->to_location,
-            'date'          => $request->date,
+            'asset_id'        => $request->asset_id,
+            'from_location_id' => $request->from_location_id,
+            'to_location_id'  => $request->to_location_id,
+            'jumlah'          => $request->jumlah,
+            'date'            => $request->date,
         ]);
 
         return redirect()->route('manage.index')->with('success', 'Data alokasi berhasil disimpan!');
-    }
-
-
-    public function data()
-    {
-        // Rekap aset → langsung dari tabel assets
-        $assets = Asset::all();
-
-        // Detail alokasi → dari tabel allocations
-        $locations = Allocation::orderBy('date', 'desc')->get();
-
-        return view('pages.data', compact('assets', 'locations'));
     }
 }

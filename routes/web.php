@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ManageController; // ✅ frontend manage allocation
+use App\Http\Controllers\ManageController; // frontend manage allocation
 use App\Http\Controllers\Admin\AssetController; // backend asset
 use App\Http\Controllers\Admin\AllocationController as AdminAllocationController; // backend allocation
 
@@ -37,8 +37,8 @@ Route::middleware('session.auth')->group(function () {
     Route::get('/produk', [DashboardController::class, 'produk'])->name('produk');
     Route::get('/hubungi', [DashboardController::class, 'hubungi'])->name('hubungi');
 
-    // ✅ Halaman rekap data sekarang ambil dari ManageController
-    Route::get('/data', [ManageController::class, 'data'])->name('data');
+    // ✅ Halaman rekap data → pakai DashboardController biar sesuai relasi baru
+    Route::get('/data', [DashboardController::class, 'data'])->name('data');
 
     // ✅ Frontend Manage Allocation (user)
     Route::get('/manage', [ManageController::class, 'index'])->name('manage.index');

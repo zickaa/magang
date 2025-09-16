@@ -16,8 +16,8 @@
             <div class="card-body">
                 <h5 class="card-title fw-bold">Tentang Website</h5>
                 <p class="card-text">
-                    Website ini dibuat untuk memberikan informasi lengkap mengenai perusahaan, produk, dan cara menghubungi
-                    kami.
+                    Merupakan media untuk memberikan rekomendasi tempat yang berdasarkan lokasi, rating, dan kategori yang
+                    diinginkan.
                 </p>
             </div>
         </div>

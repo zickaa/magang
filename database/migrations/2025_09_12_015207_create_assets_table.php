@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_asset');
-            $table->string('kode_asset')->unique();
+            $table->string('asset_name'); // ✅ konsisten dengan model + seeder
+            $table->string('kode_asset')->unique()->nullable(); // optional, bisa null
+            $table->integer('jumlah')->default(0); // ✅ untuk stok jumlah aset
             $table->timestamps();
         });
     }
