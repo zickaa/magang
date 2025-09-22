@@ -11,14 +11,15 @@ class ManageController extends Controller
 {
     public function index()
     {
-        $allocations = Allocation::with(['asset', 'fromLocation', 'toLocation'])
+        $assets = \App\Models\Asset::all();
+        $locations = \App\Models\Location::all();
+
+        // Ubah get() -> paginate(5) biar muncul pagination
+        $allocations = \App\Models\Allocation::with(['asset', 'fromLocation', 'toLocation'])
             ->orderBy('date', 'desc')
-            ->get();
+            ->paginate(10); // tampilkan 5 per halaman
 
-        $assets = Asset::all();
-        $locations = Location::all();
-
-        return view('pages.manage', compact('allocations', 'assets', 'locations'));
+        return view('pages.manage', compact('assets', 'locations', 'allocations'));
     }
 
 

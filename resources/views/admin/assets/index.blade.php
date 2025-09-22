@@ -15,7 +15,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nama Asset</th>
-                <th>Deskripsi</th>
+                <th>Kode Asset</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -23,19 +23,21 @@
             @forelse($assets as $asset)
                 <tr>
                     <td>{{ $asset->id }}</td>
-                    <td>{{ $asset->name }}</td>
-                    <td>{{ $asset->description }}</td>
+                    <td>{{ $asset->nama_asset }}</td>
+                    <td>{{ $asset->kode_asset }}</td>
                     <td>
                         <a href="{{ route('admin.assets.edit', $asset->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('admin.assets.destroy', $asset->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button onclick="return confirm('Yakin hapus data ini?')" class="btn btn-danger btn-sm">Hapus</button>
+                            <button onclick="return confirm('Yakin hapus asset ini?')" class="btn btn-danger btn-sm">Hapus</button>
                         </form>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="text-center">Belum ada data</td></tr>
+                <tr>
+                    <td colspan="4" class="text-center">Belum ada data asset.</td>
+                </tr>
             @endforelse
         </tbody>
     </table>

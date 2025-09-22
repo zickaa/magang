@@ -7,12 +7,12 @@
         @csrf
         <div class="mb-3">
             <label class="form-label">Nama Asset</label>
-            <input type="text" name="name" class="form-control" required>
+            <input type="text" name="nama_asset" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Deskripsi</label>
-            <textarea name="description" class="form-control"></textarea>
+            <label class="form-label">Kode Asset</label>
+            <input type="text" name="kode_asset" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-success">Simpan</button>

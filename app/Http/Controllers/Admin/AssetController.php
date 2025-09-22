@@ -14,10 +14,9 @@ class AssetController extends Controller
         return view('admin.assets.index', compact('assets'));
     }
 
-    public function manage()
+    public function create()
     {
-        $assets = Asset::all();
-        return view('admin.assets.manage', compact('assets'));
+        return view('admin.assets.create');
     }
 
     public function store(Request $request)
@@ -27,9 +26,9 @@ class AssetController extends Controller
             'kode_asset' => 'required|string|max:100|unique:assets,kode_asset',
         ]);
 
-        Asset::create($request->all());
+        Asset::create($request->only(['nama_asset', 'kode_asset']));
 
-        return redirect()->route('admin.assets.manage')->with('success', 'Asset berhasil ditambahkan');
+        return redirect()->route('admin.assets.index')->with('success', 'Asset berhasil ditambahkan');
     }
 
     public function edit(Asset $asset)
@@ -44,14 +43,14 @@ class AssetController extends Controller
             'kode_asset' => 'required|string|max:100|unique:assets,kode_asset,' . $asset->id,
         ]);
 
-        $asset->update($request->all());
+        $asset->update($request->only(['nama_asset', 'kode_asset']));
 
-        return redirect()->route('admin.assets.manage')->with('success', 'Asset berhasil diperbarui');
+        return redirect()->route('admin.assets.index')->with('success', 'Asset berhasil diperbarui');
     }
 
     public function destroy(Asset $asset)
     {
         $asset->delete();
-        return redirect()->route('admin.assets.manage')->with('success', 'Asset berhasil dihapus');
+        return redirect()->route('admin.assets.index')->with('success', 'Asset berhasil dihapus');
     }
 }
