@@ -3,26 +3,24 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ManageController; // frontend manage allocation
+use App\Http\Controllers\ManageController; // frontend user allocation
 use App\Http\Controllers\Admin\AssetController; // backend asset
 use App\Http\Controllers\Admin\AllocationController as AdminAllocationController; // backend allocation
 
-// 🚀 Halaman utama langsung redirect ke admin dashboard
-Route::get('/', function () {
-    return redirect()->route('admin.dashboard');
-});
-Route::get('/welcome', function () {
-    return view('welcome');
-})->name('welcome');
+// 🚀 Default redirect → admin dashboard
+Route::get('/', fn () => redirect()->route('admin.dashboard'));
+Route::view('/welcome', 'welcome')->name('welcome');
 
 // =========================
 // 🔐 Auth Routes
 // =========================
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLoginForm')->name('login');
+    Route::post('/login', 'login');
+    Route::get('/register', 'showRegisterForm')->name('register');
+    Route::post('/register', 'register');
+    Route::post('/logout', 'logout')->name('logout');
+});
 
 // =========================
 // 🌐 Routes dengan Middleware Auth
@@ -32,17 +30,19 @@ Route::middleware('session.auth')->group(function () {
     // -------------------------
     // 🟢 Frontend User Routes
     // -------------------------
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/perusahaan', [DashboardController::class, 'perusahaan'])->name('perusahaan');
-    Route::get('/produk', [DashboardController::class, 'produk'])->name('produk');
-    Route::get('/hubungi', [DashboardController::class, 'hubungi'])->name('hubungi');
+    Route::prefix('/')->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('perusahaan', [DashboardController::class, 'perusahaan'])->name('perusahaan');
+        Route::get('produk', [DashboardController::class, 'produk'])->name('produk');
+        Route::get('hubungi', [DashboardController::class, 'hubungi'])->name('hubungi');
 
-    // ✅ Halaman rekap data → pakai DashboardController biar sesuai relasi baru
-    Route::get('/data', [DashboardController::class, 'data'])->name('data');
+        // ✅ Halaman rekap data aset + alokasi
+        Route::get('data', [DashboardController::class, 'data'])->name('data');
 
-    // ✅ Frontend Manage Allocation (user)
-    Route::get('/manage', [ManageController::class, 'index'])->name('manage.index');
-    Route::post('/manage/store', [ManageController::class, 'store'])->name('manage.store');
+        // ✅ User dapat input alokasi (versi frontend)
+        Route::get('manage', [ManageController::class, 'index'])->name('manage.index');
+        Route::post('manage/store', [ManageController::class, 'store'])->name('manage.store');
+    });
 
     // -------------------------
     // 🔥 Backend Admin Routes
@@ -50,14 +50,16 @@ Route::middleware('session.auth')->group(function () {
     Route::prefix('admin')->as('admin.')->group(function () {
 
         // Admin Dashboard
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
 
-        // CRUD Asset (admin)
+        // ✅ Halaman Manage Assets khusus admin
+        Route::get('assets/manage', [AssetController::class, 'manage'])->name('assets.manage');
+        Route::post('assets/manage/store', [AssetController::class, 'storeManage'])->name('assets.manage.store');
+
+        // ✅ CRUD Asset
         Route::resource('assets', AssetController::class);
 
-        // CRUD Allocation (admin)
+        // ✅ CRUD Allocation
         Route::resource('allocations', AdminAllocationController::class);
     });
 });

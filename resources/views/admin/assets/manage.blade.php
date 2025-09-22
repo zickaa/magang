@@ -43,7 +43,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Nama Asset</th>
-                            <th>Kode Asset</th>
+                            <!-- <th>Kode Asset</th> -->
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -52,7 +52,7 @@
                             <tr>
                                 <td>{{ $asset->id }}</td>
                                 <td>{{ $asset->nama_asset }}</td>
-                                <td>{{ $asset->kode_asset }}</td>
+                                <!-- <td>{{ $asset->kode_asset }}</td> -->
                                 <td>
                                     <a href="{{ route('admin.assets.edit', $asset) }}"
                                         class="btn btn-warning btn-sm">Edit</a>
