@@ -17,9 +17,12 @@ class AssetController extends Controller
         return view('admin.assets.index', compact('assets'));
     }
 
+<<<<<<< HEAD
     /**
      * Form tambah asset baru.
      */
+=======
+>>>>>>> 4df1b2447142d860f8197edd9a1405db224a4b69
     public function create()
     {
         return view('admin.assets.create');
@@ -36,10 +39,16 @@ class AssetController extends Controller
             'jumlah'     => 'nullable|integer|min:0',
         ]);
 
+<<<<<<< HEAD
         Asset::create($request->only(['asset_name', 'kode_asset', 'jumlah']));
 
         return redirect()->route('admin.assets.index')
             ->with('success', 'Asset berhasil ditambahkan ✅');
+=======
+        Asset::create($request->only(['nama_asset', 'kode_asset']));
+
+        return redirect()->route('admin.assets.index')->with('success', 'Asset berhasil ditambahkan');
+>>>>>>> 4df1b2447142d860f8197edd9a1405db224a4b69
     }
 
     /**
@@ -61,10 +70,16 @@ class AssetController extends Controller
             'jumlah'     => 'nullable|integer|min:0',
         ]);
 
+<<<<<<< HEAD
         $asset->update($request->only(['asset_name', 'kode_asset', 'jumlah']));
 
         return redirect()->route('admin.assets.index')
             ->with('success', 'Asset berhasil diperbarui ✨');
+=======
+        $asset->update($request->only(['nama_asset', 'kode_asset']));
+
+        return redirect()->route('admin.assets.index')->with('success', 'Asset berhasil diperbarui');
+>>>>>>> 4df1b2447142d860f8197edd9a1405db224a4b69
     }
 
     /**
@@ -73,6 +88,7 @@ class AssetController extends Controller
     public function destroy(Asset $asset)
     {
         $asset->delete();
+<<<<<<< HEAD
 
         return redirect()->route('admin.assets.index')
             ->with('success', 'Asset berhasil dihapus 🗑️');
@@ -105,5 +121,8 @@ class AssetController extends Controller
 
         return redirect()->route('admin.assets.manage')
             ->with('success', 'Jumlah asset berhasil diperbarui ✅');
+=======
+        return redirect()->route('admin.assets.index')->with('success', 'Asset berhasil dihapus');
+>>>>>>> 4df1b2447142d860f8197edd9a1405db224a4b69
     }
 }

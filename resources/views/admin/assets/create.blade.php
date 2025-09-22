@@ -8,6 +8,7 @@
         @csrf
         <div class="mb-3">
             <label class="form-label">Nama Asset</label>
+<<<<<<< HEAD
             <input type="text" name="asset_name" class="form-control" value="{{ old('asset_name') }}" required>
             @error('asset_name')
                 <small class="text-danger">{{ $message }}</small>
@@ -20,6 +21,14 @@
             @error('jumlah')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
+=======
+            <input type="text" name="nama_asset" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Kode Asset</label>
+            <input type="text" name="kode_asset" class="form-control" required>
+>>>>>>> 4df1b2447142d860f8197edd9a1405db224a4b69
         </div>
 
         <button type="submit" class="btn btn-success">
